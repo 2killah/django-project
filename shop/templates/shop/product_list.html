@@ -1,0 +1,43 @@
+{% extends 'shop/base.html' %}
+{% block title %}Каталог — место.{% endblock %}
+{% block content %}
+<section class="intro">
+  <div class="intro-copy">
+    <p class="eyebrow">Небольшой магазин хороших вещей</p>
+    <h1>Дом начинается<br>с <em>мелочей.</em></h1>
+    <p class="intro-note">Предметы для ритма жизни, который подходит именно вам.</p>
+    <a class="text-link" href="#catalog">Смотреть каталог <span aria-hidden="true">↓</span></a>
+  </div>
+  <div class="intro-art" aria-hidden="true">
+    <div class="sun"></div><div class="vase vase-left"></div><div class="vase vase-right"></div>
+    <span class="art-caption">коллекция<br>для дома · 01</span>
+  </div>
+</section>
+
+<section class="catalog" id="catalog">
+  <div class="section-heading">
+    <div><p class="eyebrow">Выбрали для вас</p><h2>Каталог</h2></div>
+    <div class="filters" aria-label="Категории">
+      <a class="filter {% if not active_category %}is-active{% endif %}" href="{% url 'home' %}">Все</a>
+      {% for category in categories %}
+        <a class="filter {% if active_category == category %}is-active{% endif %}" href="?category={{ category|urlencode }}">{{ category }}</a>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="product-grid">
+    {% for product in products %}
+      <article class="product-card">
+        <div class="product-art art-{{ forloop.counter0|divisibleby:4 }}-{{ forloop.counter0 }}">
+          <span class="product-category">{{ product.category }}</span>
+          <span class="product-glyph" aria-hidden="true">{{ product.glyph }}</span>
+          {% if product.is_featured %}<span class="product-tag">Выбор места</span>{% endif %}
+        </div>
+        <div class="product-info"><div><h3>{{ product.name }}</h3><p>{{ product.description }}</p></div><strong>{{ product.price|floatformat:0 }} ₽</strong></div>
+        <form method="post" action="{% url 'cart_add' product.pk %}">{% csrf_token %}<button class="add-button" type="submit"><span>В корзину</span><span aria-hidden="true">+</span></button></form>
+      </article>
+    {% empty %}
+      <p class="empty-state">В этой категории пока нет товаров.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

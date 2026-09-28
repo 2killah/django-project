@@ -1,0 +1,24 @@
+{% extends 'shop/base.html' %}
+{% block title %}Корзина — место.{% endblock %}
+{% block content %}
+<section class="cart-page">
+  <p class="eyebrow">Почти ваше</p><h1>Корзина</h1>
+  {% if items %}
+    <div class="cart-layout">
+      <div class="cart-items">
+        {% for item in items %}
+          <article class="cart-item">
+            <div class="cart-item-mark" aria-hidden="true">{{ item.product.glyph }}</div>
+            <div class="cart-item-name"><h2>{{ item.product.name }}</h2><p>{{ item.product.category }} · {{ item.quantity }} шт.</p></div>
+            <strong>{{ item.subtotal|floatformat:0 }} ₽</strong>
+            <form method="post" action="{% url 'cart_remove' item.product.pk %}">{% csrf_token %}<button class="remove-button" type="submit" aria-label="Удалить {{ item.product.name }}">×</button></form>
+          </article>
+        {% endfor %}
+      </div>
+      <aside class="cart-summary"><p>Итого</p><strong>{{ total|floatformat:0 }} ₽</strong><form method="post" action="{% url 'checkout' %}">{% csrf_token %}<button class="checkout-button" type="submit">Оформить заказ <span aria-hidden="true">→</span></button></form><a class="back-link" href="{% url 'home' %}">Продолжить покупки</a></aside>
+    </div>
+  {% else %}
+    <div class="empty-cart"><span aria-hidden="true">○</span><h2>Пока здесь тихо</h2><p>Добавьте что-нибудь из каталога, и оно появится здесь.</p><a class="checkout-button" href="{% url 'home' %}">Перейти в каталог <span aria-hidden="true">→</span></a></div>
+  {% endif %}
+</section>
+{% endblock %}

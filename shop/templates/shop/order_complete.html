@@ -1,0 +1,5 @@
+{% extends 'shop/base.html' %}
+{% block title %}Заказ принят — место.{% endblock %}
+{% block content %}
+<section class="order-complete"><span class="order-mark" aria-hidden="true">✓</span><p class="eyebrow">Спасибо, что выбрали нас</p><h1>Заказ принят</h1><p>Это демо-магазин: заказ никуда не отправлен, но корзина уже очищена.</p><a class="checkout-button" href="{% url 'home' %}">Вернуться в каталог <span aria-hidden="true">→</span></a></section>
+{% endblock %}
